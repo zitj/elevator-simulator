@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Elevator simulator</title>
+		<script src="./script.js" defer></script>
+		<link rel="stylesheet" href="./style.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<div id="building">
+			<div id="floors"></div>
+			<div id="elevators"></div>
+		</div>
+
+		<div class="settings-panel">
+			<form id="create-building-form">
+				<h2>Create Building</h2>
+				<p class="warning-message"></p>
+				<div class="input-field">
+					<label for="number-of-floors">Number of floors:</label>
+					<input id="generate-number-of-floors-input" type="number" name="number-of-floors" min="0" required />
+				</div>
+				<div class="input-field">
+					<label for="number-of-elevators">Number of elevators:</label>
+					<input id="generate-number-of-elevators-input" type="number" name="number-of-elevators" min="0" required />
+				</div>
+				<span class="hide-button">&#8676</span>
+				<button class="create-button">Create</button>
+			</form>
+			<form id="call-elevator-form">
+				<h2>Call Elevator</h2>
+				<p class="warning-message"></p>
+				<div class="input-field">
+					<label for="current-floor">Current floor:</label>
+					<input id="current-floor-input" type="number" name="current-floor" min="0" required />
+				</div>
+				<div class="input-field">
+					<label for="destination-floor">Destination floor:</label>
+					<input id="destination-floor-input" type="number" name="destination-floor" min="0" required />
+				</div>
+				<button type="submit" class="call-button">Call</button>
+				<button type="submit" class="call-random-button">🎲 RANDOM CALL 🎲</button>
+			</form>
+			
+		</div>
+	</body>
+</html>
