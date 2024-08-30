@@ -1,13 +1,16 @@
 body {
 	font-family: 'Poppins', sans-serif;
 	color: #2d3436;
+	background: rgba(242, 242, 242, 0.48);
 }
+
 #building {
 	position: relative;
-	width: 80%;
+	width: 50%;
 	height: 80%;
 	background: rgb(214, 214, 214);
 	border-radius: 3px;
+	margin: 0 auto;
 }
 
 #floors {
@@ -79,50 +82,76 @@ body {
 }
 
 #elevators .elevator.active {
-	background-color: rgb(253, 16, 99);
 	background-color: #d63031;
-	background-color: #e84393;
 	background-color: #00b894;
 
 	opacity: 0.65;
 }
+
 #elevators .elevator.pause {
-	background-color: rgb(253, 16, 99);
 	background-color: #d63031;
-	background-color: #e84393;
 	background-color: #00b894;
 	opacity: 1;
+}
+#elevators .elevator.active-random,
+#elevators .elevator.active-random.pause {
+	background: #0984e3;
 }
 .settings-panel {
 	width: 100%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.099);
+	position: relative;
+	height: 400px;
 }
-.settings-panel form {
+.settings-panel form,
+.settings-panel section {
 	width: 250px;
 	padding: 0 50px 50px 50px;
-	border: 1px solid #3333337b;
+	border: 1px solid #3333332e;
 	border-radius: 3px;
 	margin-top: 2em;
 	text-align: center;
 	margin-left: 2em;
 	transition: 0.3s;
 	transform: translateX(0px) translateY(0px) rotate(0deg);
+	background-color: white;
+	height: 230px;
+	overflow: hidden;
 }
-.settings-panel form.hide {
-	transform: translateX(-280px) translateY(20px) rotate(90deg);
+.settings-panel form.hide,
+.settings-panel section.hide {
+	/* transform: translateX(135px) translateY(152px) rotate(0deg); */
+	transform: translateX(0px) translateY(150px) rotate(0deg);
 	background: #2d3436;
 	color: white;
 	cursor: pointer;
 	opacity: 1;
+	height: 20px;
 }
-.settings-panel form.move-left {
-	transform: translateX(-250px);
+
+.settings-panel section.hide {
+	background: #0984e3;
 }
-.settings-panel form.hide:hover {
+.settings-panel form#call-elevator-form.hide {
+	background: #00b894;
+}
+.settings-panel form.hide span.hide-button {
+	display: none;
+}
+.settings-panel form.move-left,
+.settings-panel section.move-left {
+	transform: translateX(-250px) translateY(-50px);
+}
+.settings-panel form.hide:hover,
+.settings-panel section.hide:hover {
 	opacity: 0.8;
 }
-.settings-panel form h2 {
+.settings-panel form h2,
+.settings-panel section h2 {
 	margin-bottom: 5px;
 }
 .settings-panel form .input-field {
@@ -144,7 +173,10 @@ body {
 	text-align: center;
 }
 
-.settings-panel form button {
+.settings-panel form button,
+.settings-panel form span.hide-button,
+.settings-panel form span.call-random-button,
+.settings-panel section button {
 	padding: 1em 2.5em;
 	text-transform: uppercase;
 	border-radius: 5px;
@@ -153,39 +185,61 @@ body {
 	color: white;
 	cursor: pointer;
 	opacity: 1;
+	text-align: center;
+	margin-top: 1em;
 }
-.settings-panel form button.call-random-button {
+.settings-panel form span.call-random-button,
+.settings-panel form span.hide-button {
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	border-radius: 5px 5px 0 0;
 	background-color: #0984e3;
-	padding: 0.7em;
+	background-color: #2d3436;
+	border-radius: 0;
+	padding: 0.3em;
+	font-size: 16px;
 }
-.settings-panel form button:hover {
-	opacity: 0.8;
-}
-.settings-panel form button:active {
-	opacity: 1;
+.settings-panel form button.create-button {
+	background: #e1b12c;
+	background-color: #2d3436;
 }
 
-.settings-panel form .hide-button {
-	font-size: 25px;
-	padding: 10px 15px;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	border-radius: 0;
-	background: transparent;
-	color: #333333;
-	cursor: pointer;
-	margin-bottom: 0;
+.settings-panel form button:hover,
+.settings-panel section button:hover,
+.settings-panel form span.hide-button:hover,
+.settings-panel form span.call-random-button:hover {
+	opacity: 0.8;
+}
+.settings-panel form button:active,
+.settings-panel section button:active,
+.settings-panel form span.hide-button:active,
+.settings-panel form span.call-random-button:active {
+	opacity: 1;
 }
 
 .settings-panel .warning-message {
 	color: #d63031;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: bold;
 	margin-top: 0;
+	height: 25px;
+}
+
+#random-calls-section .content {
+	text-align: left;
+	margin-top: 30px;
+	margin-bottom: 1.2em;
+}
+#random-calls-section button {
+	background-color: #d63031;
+}
+#random-calls-section button#start-random-calls-button {
+	background-color: #0984e3;
+}
+
+#random-calls-section .content .number {
+	font-weight: 500;
+	font-size: 22px;
+	margin-left: 2px;
 }

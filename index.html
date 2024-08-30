@@ -4,8 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Elevator simulator</title>
-		<script src="./script.js" defer></script>
-		<link rel="stylesheet" href="./style.css" />
+		<script src="./app.js" type="module" defer></script>
+		<link rel="stylesheet" href="./style/style.css" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -14,41 +14,63 @@
 		/>
 	</head>
 	<body>
-		<div id="building">
-			<div id="floors"></div>
-			<div id="elevators"></div>
-		</div>
+		<div id="general-wrapper">
+			<div id="building">
+				<div id="floors"></div>
+				<div id="elevators"></div>
+			</div>
 
-		<div class="settings-panel">
-			<form id="create-building-form">
-				<h2>Create Building</h2>
-				<p class="warning-message"></p>
-				<div class="input-field">
-					<label for="number-of-floors">Number of floors:</label>
-					<input id="generate-number-of-floors-input" type="number" name="number-of-floors" min="0" required />
-				</div>
-				<div class="input-field">
-					<label for="number-of-elevators">Number of elevators:</label>
-					<input id="generate-number-of-elevators-input" type="number" name="number-of-elevators" min="0" required />
-				</div>
-				<span class="hide-button">&#8676</span>
-				<button class="create-button">Create</button>
-			</form>
-			<form id="call-elevator-form">
-				<h2>Call Elevator</h2>
-				<p class="warning-message"></p>
-				<div class="input-field">
-					<label for="current-floor">Current floor:</label>
-					<input id="current-floor-input" type="number" name="current-floor" min="0" required />
-				</div>
-				<div class="input-field">
-					<label for="destination-floor">Destination floor:</label>
-					<input id="destination-floor-input" type="number" name="destination-floor" min="0" required />
-				</div>
-				<button type="submit" class="call-button">Call</button>
-				<button type="submit" class="call-random-button">🎲 RANDOM CALL 🎲</button>
-			</form>
-			
+			<div class="settings-panel">
+				<form id="create-building-form">
+					<h2>Create Building</h2>
+					<div class="content">
+						<p class="warning-message"></p>
+						<div class="input-field">
+							<label for="number-of-floors">Number of floors:</label>
+							<input id="generate-number-of-floors-input" type="number" name="number-of-floors" min="0" required />
+						</div>
+						<div class="input-field">
+							<label for="number-of-elevators">Number of elevators:</label>
+							<input id="generate-number-of-elevators-input" type="number" name="number-of-elevators" min="0" required />
+						</div>
+					</div>
+					<button class="create-button">Create</button>
+				</form>
+				<form id="call-elevator-form">
+					<h2>Call Elevator</h2>
+					<div class="content">
+						<p class="warning-message"></p>
+						<div class="input-field">
+							<label for="current-floor">From current floor:</label>
+							<input id="current-floor-input" type="number" name="current-floor" min="0" required />
+						</div>
+						<div class="input-field">
+							<label for="destination-floor">To destination floor:</label>
+							<input id="destination-floor-input" type="number" name="destination-floor" min="0" required />
+						</div>
+					</div>
+					<button type="submit" class="call-button">Call</button>
+				</form>
+				<section id="random-calls-section">
+					<h2>Random calls</h2>
+					<div class="content">
+						<div class="timer">
+							<span class="text">Next call starts in:</span>
+							<span class="number">0</span>
+						</div>
+						<div class="current-floor">
+							<span class="text">Random current floor:</span>
+							<span class="number">-</span>
+						</div>
+						<div class="destination-floor">
+							<span class="text">Random destination floor:</span>
+							<span class="number">-</span>
+						</div>
+					</div>
+					<button id="start-random-calls-button">Start</button>
+					<button id="stop-random-calls-button">Stop</button>
+				</section>
+			</div>
 		</div>
 	</body>
 </html>
