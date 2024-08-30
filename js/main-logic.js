@@ -1,11 +1,12 @@
 import { callElevatorForm, elevatorsDOM } from './DOM/dom-elements.js';
 import { elevators } from '../app.js';
 import { passangerShowsUpOnFloor, pickUpPassanger } from './generators/passanger.js';
+import { STATUS } from './constants/status.js';
 
 function returnNearestAvailableElevatorFor(currentFloor, destination, isRandomCall) {
 	let arrayOfDifferencesInFloors = [];
 	for (let i = 0; i < elevators.length; i++) {
-		if (elevators[i].status == 'idle') {
+		if (elevators[i].status == STATUS.IDLE) {
 			let differenceInFloors = 0;
 			let elevator = { id: elevators[i].id, differenceInFloors };
 
@@ -31,9 +32,9 @@ function returnNearestAvailableElevatorFor(currentFloor, destination, isRandomCa
 }
 
 function returnStatus(a, b) {
-	if (a - b > 0) return 'moving UP';
-	if (a - b < 0) return 'moving DOWN';
-	if (a - b === 0) return 'READY';
+	if (a - b > 0) return STATUS.MOVING_UP;
+	if (a - b < 0) return STATUS.MOVING_DOWN;
+	if (a - b === 0) return STATUS.READY;
 }
 
 function goTo(destinationFloor, currentFloor, nearestElevator, finalDestination) {
@@ -41,9 +42,9 @@ function goTo(destinationFloor, currentFloor, nearestElevator, finalDestination)
 	const totalFloors = Math.abs(destinationFloor - currentFloor);
 	let timer = setInterval(() => {
 		if (floorCounter >= totalFloors) {
-			nearestElevator.status = finalDestination !== null && finalDestination !== undefined ? 'READY' : 'idle';
+			nearestElevator.status = finalDestination !== null && finalDestination !== undefined ? STATUS.READY : STATUS.IDLE;
 			nearestElevator.currentFloor = destinationFloor;
-			if (nearestElevator.status === 'READY') {
+			if (nearestElevator.status === STATUS.READY) {
 				console.log(`The elevator NUMBER ${nearestElevator.id} is READY. Moving to final destination.`);
 				nearestElevator.domElement.classList.add('pause');
 				setTimeout(() => {
@@ -63,11 +64,11 @@ function goTo(destinationFloor, currentFloor, nearestElevator, finalDestination)
 			console.log(`The elevator NUMBER ${nearestElevator.id} is ${nearestElevator.status} ${floorCounter} floors`);
 
 			if (finalDestination == null && finalDestination == undefined) pickUpPassanger(nearestElevator);
-			if (nearestElevator.status == 'moving UP') {
+			if (nearestElevator.status == STATUS.MOVING_UP) {
 				nearestElevator.coordinates.floor.y = nearestElevator.coordinates.floor.y - 1 - 50;
 				nearestElevator.domElement.style.top = `${nearestElevator.coordinates.floor.y}px`;
 			}
-			if (nearestElevator.status == 'moving DOWN') {
+			if (nearestElevator.status == STATUS.MOVING_DOWN) {
 				nearestElevator.coordinates.floor.y = nearestElevator.coordinates.floor.y + 1 + 50;
 				nearestElevator.domElement.style.top = `${nearestElevator.coordinates.floor.y}px`;
 			}
@@ -86,8 +87,8 @@ function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
 		nearestElevator.status = returnStatus(passangersCurrentFloor, nearestElevator.currentFloor);
 		console.log('This is nearest elevator: ', nearestElevator);
 		passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
-		if (nearestElevator.status === 'READY') goTo(destinationFloor, passangersCurrentFloor, nearestElevator);
-		if (nearestElevator.status !== 'READY') goTo(passangersCurrentFloor, nearestElevator.currentFloor, nearestElevator, destinationFloor);
+		if (nearestElevator.status === STATUS.READY) goTo(destinationFloor, passangersCurrentFloor, nearestElevator);
+		if (nearestElevator.status !== STATUS.READY) goTo(passangersCurrentFloor, nearestElevator.currentFloor, nearestElevator, destinationFloor);
 	}
 }
 

@@ -7,12 +7,14 @@ const { createBuildingForm, callElevatorForm, randomCallsSection, startRandomBut
 
 export let elevators = [];
 export let floors = [];
+export let randomElevatorCalls = false;
+export function resetRandomElevatorCalls() {
+	randomElevatorCalls = false;
+}
 export function resetElevatorsAndFloors() {
 	elevators = [];
 	floors = [];
 }
-
-export let randomElevatorCalls = false;
 
 const messageAdvice = 'For more enjoyable UI/UX try inserting maximum 10 for both.';
 
