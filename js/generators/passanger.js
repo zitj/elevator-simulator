@@ -9,7 +9,7 @@ function passangerShowsUpOnFloor(number, elevator) {
 			if (passangersContainer) {
 				let passangerElement = document.createElement('span');
 				passangerElement.classList.add('passanger');
-				passangerElement.innerHTML = '🧍🏽‍♂️';
+				passangerElement.innerHTML = `<span>🧍🏽‍♂️</span><span>Floor No. ${elevator.destinationFloor} please</span>`;
 				passangerElement.style.left = `${elevator.coordinates.initial.x}px`;
 				passangerElement.dataset.waitingForElevator = elevator.id;
 				passangersContainer.appendChild(passangerElement);

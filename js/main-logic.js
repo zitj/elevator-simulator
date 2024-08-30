@@ -86,6 +86,7 @@ function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
 		let nearestElevator = returnNearestAvailableElevatorFor(passangersCurrentFloor, destinationFloor, isRandomCall);
 		nearestElevator.status = returnStatus(passangersCurrentFloor, nearestElevator.currentFloor);
 		console.log('This is nearest elevator: ', nearestElevator);
+		nearestElevator.destinationFloor = destinationFloor;
 		passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
 		if (nearestElevator.status === STATUS.READY) goTo(destinationFloor, passangersCurrentFloor, nearestElevator);
 		if (nearestElevator.status !== STATUS.READY) goTo(passangersCurrentFloor, nearestElevator.currentFloor, nearestElevator, destinationFloor);

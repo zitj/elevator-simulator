@@ -54,6 +54,15 @@ body {
 	position: absolute;
 	z-index: 2;
 }
+#floors .floor span.passanger span:last-child {
+	font-size: 10px;
+	position: absolute;
+	left: -20px;
+	width: 80px;
+}
+#floors .floor span.passanger span:first-child {
+	font-size: 25px;
+}
 #floors .floor .passangers {
 	height: 100%;
 	width: 100%;
