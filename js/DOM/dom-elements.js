@@ -4,12 +4,13 @@ const buildingDOM = document.getElementById('building');
 const createBuildingForm = document.getElementById('create-building-form');
 const callElevatorForm = document.getElementById('call-elevator-form');
 const randomCallsSection = document.getElementById('random-calls-section');
-const startRandomButton = document.getElementById('start-random-calls-button');
+const randomButton = document.getElementById('random-calls-button');
 const stopRandomButton = document.getElementById('stop-random-calls-button');
 const numberOfFloorsInput = document.getElementById('generate-number-of-floors-input');
 const numberOfElevatorsInput = document.getElementById('generate-number-of-elevators-input');
 const currentFloorInput = document.getElementById('current-floor-input');
 const destinationFloorInput = document.getElementById('destination-floor-input');
+const body = document.querySelector('body');
 
 export {
 	elevatorsDOM,
@@ -18,10 +19,11 @@ export {
 	createBuildingForm,
 	callElevatorForm,
 	randomCallsSection,
-	startRandomButton,
+	randomButton,
 	stopRandomButton,
 	numberOfFloorsInput,
 	numberOfElevatorsInput,
 	currentFloorInput,
 	destinationFloorInput,
+	body,
 };

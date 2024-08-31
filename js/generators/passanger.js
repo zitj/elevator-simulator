@@ -9,7 +9,7 @@ function passangerShowsUpOnFloor(number, elevator) {
 			if (passangersContainer) {
 				let passangerElement = document.createElement('span');
 				passangerElement.classList.add('passanger');
-				passangerElement.innerHTML = `<span>🧍🏽‍♂️</span><span>Floor No. ${elevator.destinationFloor} please</span>`;
+				passangerElement.innerHTML = `<span class='icon'>🧍🏽‍♂️</span><span class='words'>To floor no: ${elevator.destinationFloor}</span>`;
 				passangerElement.style.left = `${elevator.coordinates.initial.x}px`;
 				passangerElement.dataset.waitingForElevator = elevator.id;
 				passangersContainer.appendChild(passangerElement);
@@ -39,7 +39,8 @@ function passangersShowsUpRandomly() {
 		if (time < 0) time = 4;
 		if (!randomElevatorCalls) {
 			time = 0;
-
+			randomCurrentFloorDOM.innerHTML = '-';
+			randomDestinationFloorDOM.innerHTML = '-';
 			clearInterval(timerCounter);
 		}
 		timerNumberDOM.innerHTML = `${time}`;
@@ -57,8 +58,6 @@ function passangersShowsUpRandomly() {
 			randomDestinationFloorDOM.innerHTML = `${randomDestinationFloor}`;
 			callElevator(randomCurrentFloor, randomDestinationFloor, true);
 		} else {
-			randomCurrentFloorDOM.innerHTML = '-';
-			randomDestinationFloorDOM.innerHTML = '-';
 			clearInterval(timer);
 		}
 	}, 5000);

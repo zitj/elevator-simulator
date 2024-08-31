@@ -1,9 +1,10 @@
+import { BUTTONS } from './js/constants/buttons.js';
 import * as DOMElements from './js/DOM/dom-elements.js';
 import { createBuilding } from './js/generators/building.js';
 import { passangersShowsUpRandomly } from './js/generators/passanger.js';
 import { callElevator } from './js/main-logic.js';
 
-const { createBuildingForm, callElevatorForm, randomCallsSection, startRandomButton, stopRandomButton } = DOMElements;
+const { createBuildingForm, callElevatorForm, randomCallsSection, randomButton } = DOMElements;
 
 export let elevators = [];
 export let floors = [];
@@ -42,11 +43,13 @@ createBuildingForm.addEventListener('click', (event) => {
 	if (htmlElement.classList.contains('create-button')) createBuilding();
 });
 
-startRandomButton.addEventListener('click', (event) => {
-	randomElevatorCalls = true;
-	passangersShowsUpRandomly();
-});
-
-stopRandomButton.addEventListener('click', (event) => {
-	randomElevatorCalls = false;
+randomButton.addEventListener('click', (event) => {
+	if (randomButton.innerText === BUTTONS.START) {
+		randomElevatorCalls = true;
+		randomButton.innerText = BUTTONS.STOP;
+		passangersShowsUpRandomly();
+	} else {
+		randomButton.innerText = BUTTONS.START;
+		randomElevatorCalls = false;
+	}
 });

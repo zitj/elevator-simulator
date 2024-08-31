@@ -26,7 +26,7 @@ function setCoordinatesToElevator(elevator, htmlElement, numberOfElevators) {
 	htmlElement.style.left = `${elevator.coordinates.initial.x + 10}px`;
 	htmlElement.style.top = `${elevator.coordinates.floor.y}px`;
 	htmlElement.dataset.id = elevator.id;
-	htmlElement.innerHTML = `<span>${elevator.id + 1}</span>`;
+	// htmlElement.innerHTML = `<span>${elevator.id}</span>`;
 }
 
 function renderElevatorsDOM(elevator, numberOfElevators) {

@@ -54,13 +54,13 @@ body {
 	position: absolute;
 	z-index: 2;
 }
-#floors .floor span.passanger span:last-child {
+#floors .floor .words {
 	font-size: 10px;
 	position: absolute;
 	left: -20px;
 	width: 80px;
 }
-#floors .floor span.passanger span:first-child {
+#floors .floor .icon {
 	font-size: 25px;
 }
 #floors .floor .passangers {
@@ -179,12 +179,12 @@ body {
 	font-size: 22px;
 	border: none;
 	border-bottom: 1px solid #3333337b;
+	/* border: 1px solid #33333334; */
 	text-align: center;
+	z-index: 10000;
 }
 
 .settings-panel form button,
-.settings-panel form span.hide-button,
-.settings-panel form span.call-random-button,
 .settings-panel section button {
 	padding: 1em 2.5em;
 	text-transform: uppercase;
@@ -197,20 +197,8 @@ body {
 	text-align: center;
 	margin-top: 1em;
 }
-.settings-panel form span.call-random-button,
-.settings-panel form span.hide-button {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	background-color: #0984e3;
-	background-color: #2d3436;
-	border-radius: 0;
-	padding: 0.3em;
-	font-size: 16px;
-}
+
 .settings-panel form button.create-button {
-	background: #e1b12c;
 	background-color: #2d3436;
 }
 
@@ -236,8 +224,6 @@ body {
 }
 
 #random-calls-section .content {
-	text-align: left;
-	margin-top: 30px;
 	margin-bottom: 1.2em;
 }
 #random-calls-section button {
@@ -251,4 +237,68 @@ body {
 	font-weight: 500;
 	font-size: 22px;
 	margin-left: 2px;
+}
+
+body.alternative-view #building {
+	margin: 0;
+	width: 70%;
+}
+body.alternative-view #general-wrapper {
+	display: flex;
+}
+body.alternative-view .settings-panel {
+	width: 26%;
+	margin: 0 auto;
+	height: 100%;
+	flex-direction: column;
+	z-index: 5;
+	box-shadow: none;
+}
+
+body.alternative-view .settings-panel form,
+body.alternative-view .settings-panel section {
+	padding: 0px 10px 20px 10px;
+	text-align: center;
+	transition: 0.3s;
+	transform: translateX(0px) translateY(0px) rotate(0deg);
+	width: 100%;
+	margin-top: 0;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #33333321;
+	height: auto;
+	margin-left: 0;
+}
+
+body.alternative-view .settings-panel form .input-field {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	text-align: left;
+	margin-bottom: 10px;
+	overflow: auto;
+}
+body.alternative-view .settings-panel button {
+	width: 80%;
+}
+
+body.alternative-view .settings-panel form .content,
+body.alternative-view .settings-panel section .content {
+	text-align: left;
+}
+body.alternative-view .settings-panel .warning-message {
+	height: auto;
+	text-align: center;
+}
+
+body.alternative-view .content h2 {
+	text-align: center;
+}
+body.alternative-view .settings-panel form .input-field input {
+	width: 40%;
+	background-color: transparent;
+	border: 1px solid #33333336;
+}
+body.alternative-view .settings-panel section {
+	border: none;
 }
