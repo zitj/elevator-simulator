@@ -104,7 +104,8 @@ body {
 }
 #elevators .elevator.active-random,
 #elevators .elevator.active-random.pause {
-	background: #0984e3;
+	/* background-color: #d63031; */
+	background-color: #0984e3;
 }
 .settings-panel {
 	width: 100%;
@@ -226,10 +227,8 @@ body {
 #random-calls-section .content {
 	margin-bottom: 1.2em;
 }
-#random-calls-section button {
-	background-color: #d63031;
-}
-#random-calls-section button#start-random-calls-button {
+#random-calls-section button#random-calls-button {
+	/* background-color: #d63031; */
 	background-color: #0984e3;
 }
 
