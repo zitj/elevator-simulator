@@ -17,7 +17,7 @@ export function resetElevatorsAndFloors() {
 	floors = [];
 }
 
-const messageAdvice = 'For more enjoyable UI/UX try inserting maximum 10 for both.';
+const messageAdvice = 'For more enjoyable UI/UX try inserting less than 15 for both.';
 
 createBuildingForm.querySelector('.warning-message').innerHTML = messageAdvice;
 callElevatorForm.style.display = 'none';
