@@ -2,6 +2,7 @@ import { callElevatorForm, elevatorsDOM } from './DOM/dom-elements.js';
 import { elevators } from '../app.js';
 import { passangerShowsUpOnFloor, pickUpPassanger } from './generators/passanger.js';
 import { STATUS } from './constants/status.js';
+import { SYMBOLS } from './constants/symbols.js';
 
 function returnNearestAvailableElevatorFor(currentFloor, destination, isRandomCall) {
 	let arrayOfDifferencesInFloors = [];
@@ -69,22 +70,17 @@ function goTo(destinationFloor, currentFloor, nearestElevator, finalDestination)
 			floorCounter++;
 			nearestElevator.status = returnStatus(destinationFloor, currentFloor);
 			console.log(`The elevator NUMBER ${nearestElevator.id} is ${nearestElevator.status} ${floorCounter} floors`);
-
 			if (finalDestination == null && finalDestination == undefined) pickUpPassanger(nearestElevator);
-			if (nearestElevator.status == STATUS.MOVING_UP) {
-				nearestElevator.domElement.querySelector('.arrow').classList.remove('moving-down');
-				nearestElevator.domElement.querySelector('.arrow').classList.add('moving-up');
-				nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8679;';
-				nearestElevator.coordinates.floor.y = nearestElevator.coordinates.floor.y - 1 - 50;
-				nearestElevator.domElement.style.top = `${nearestElevator.coordinates.floor.y}px`;
-			}
-			if (nearestElevator.status == STATUS.MOVING_DOWN) {
-				nearestElevator.domElement.querySelector('.arrow').classList.remove('moving-up');
-				nearestElevator.domElement.querySelector('.arrow').classList.add('moving-down');
-				nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8681;';
-				nearestElevator.coordinates.floor.y = nearestElevator.coordinates.floor.y + 1 + 50;
-				nearestElevator.domElement.style.top = `${nearestElevator.coordinates.floor.y}px`;
-			}
+			const arrowElement = nearestElevator.domElement.querySelector('.arrow');
+			const direction = nearestElevator.status == STATUS.MOVING_UP ? 'up' : 'down';
+			const opositeDirection = nearestElevator.status == STATUS.MOVING_UP ? 'down' : 'up';
+			const arrowSymbol = nearestElevator.status == STATUS.MOVING_UP ? SYMBOLS.ARROW_UP : SYMBOLS.ARROW_DOWN;
+			const moveDistance = nearestElevator.status == STATUS.MOVING_UP ? nearestElevator.coordinates.floor.y - 1 - 50 : nearestElevator.coordinates.floor.y + 1 + 50;
+			arrowElement.classList.remove(`moving-${opositeDirection}`);
+			arrowElement.classList.add(`moving-${direction}`);
+			arrowElement.innerHTML = arrowSymbol;
+			nearestElevator.coordinates.floor.y = moveDistance;
+			nearestElevator.domElement.style.top = `${nearestElevator.coordinates.floor.y}px`;
 		}
 	}, 700);
 }
