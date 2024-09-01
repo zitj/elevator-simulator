@@ -1,3 +1,9 @@
+:root {
+	--elevator-regular-call-color: #218c74;
+	--elevator-random-call-color: #6c5ce7;
+	--elevator-arrow-color: lime;
+}
+
 body {
 	font-family: 'Poppins', sans-serif;
 	color: #2d3436;
@@ -92,22 +98,19 @@ body {
 	opacity: 0.6;
 }
 #elevators .elevator span.arrow {
-	color: lime;
+	color: var(--elevator-arrow-color);
 }
 
 #elevators .elevator.active {
-	background-color: #00b894;
-	opacity: 0.65;
+	background-color: var(--elevator-regular-call-color);
+	opacity: 0.75;
 }
-
 #elevators .elevator.pause {
-	background-color: #d63031;
-	background-color: #00b894;
 	opacity: 1;
 }
 #elevators .elevator.active-random,
 #elevators .elevator.active-random.pause {
-	background-color: #6c5ce7;
+	background-color: var(--elevator-random-call-color);
 }
 .settings-panel {
 	width: 100%;
@@ -134,34 +137,7 @@ body {
 	height: 230px;
 	overflow: hidden;
 }
-.settings-panel form.hide,
-.settings-panel section.hide {
-	/* transform: translateX(135px) translateY(152px) rotate(0deg); */
-	transform: translateX(0px) translateY(150px) rotate(0deg);
-	background: #2d3436;
-	color: white;
-	cursor: pointer;
-	opacity: 1;
-	height: 20px;
-}
 
-.settings-panel section.hide {
-	background: #0984e3;
-}
-.settings-panel form#call-elevator-form.hide {
-	background: #00b894;
-}
-.settings-panel form.hide span.hide-button {
-	display: none;
-}
-.settings-panel form.move-left,
-.settings-panel section.move-left {
-	transform: translateX(-250px) translateY(-50px);
-}
-.settings-panel form.hide:hover,
-.settings-panel section.hide:hover {
-	opacity: 0.8;
-}
 .settings-panel form h2,
 .settings-panel section h2 {
 	margin-bottom: 5px;
@@ -193,7 +169,7 @@ body {
 	text-transform: uppercase;
 	border-radius: 5px;
 	border: none;
-	background: #00b894;
+	background: #218c74;
 	color: white;
 	cursor: pointer;
 	opacity: 1;
@@ -229,7 +205,7 @@ body {
 	margin-bottom: 1.2em;
 }
 #random-calls-section button#random-calls-button {
-	background-color: #6c5ce7;
+	background-color: var(--elevator-random-call-color);
 }
 
 #random-calls-section .content .number {
