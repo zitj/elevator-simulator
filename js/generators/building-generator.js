@@ -12,9 +12,9 @@ import {
 	randomButton,
 } from '../DOM/dom-elements.js';
 
-import { elevators, resetElevatorsAndFloors, resetRandomElevatorCalls } from '../../app.js';
-import { generateFloors } from './floor.js';
-import { generateElevators, resetDistanceBetweenElevators } from './elevator.js';
+import { resetElevatorsFloorsAndPassangers, resetRandomElevatorCalls } from '../../app.js';
+import { generateFloors } from './floor-generator.js';
+import { generateElevators, resetDistanceBetweenElevators } from './elevator-generator.js';
 import { BUTTONS } from '../constants/buttons.js';
 
 function generateBuilding(numberOfFloors, numberOfElevators) {
@@ -30,7 +30,7 @@ function createBuilding() {
 		createBuildingForm.querySelector('.warning-message').innerHTML = 'Both values must be greater than 0.';
 		return;
 	}
-	resetElevatorsAndFloors();
+	resetElevatorsFloorsAndPassangers();
 	resetDistanceBetweenElevators();
 	resetRandomElevatorCalls();
 

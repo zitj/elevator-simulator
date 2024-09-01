@@ -1,20 +1,23 @@
 import { BUTTONS } from './js/constants/buttons.js';
 import * as DOMElements from './js/DOM/dom-elements.js';
-import { createBuilding } from './js/generators/building.js';
-import { passangersShowsUpRandomly } from './js/generators/passanger.js';
+import { createBuilding } from './js/generators/building-generator.js';
+import { passangersShowsUpRandomly } from './js/generators/passanger-generator.js';
 import { callElevator } from './js/main-logic.js';
 
 const { createBuildingForm, callElevatorForm, randomCallsSection, randomButton } = DOMElements;
 
 export let elevators = [];
 export let floors = [];
+export let passangers = [];
+
 export let randomElevatorCalls = false;
 export function resetRandomElevatorCalls() {
 	randomElevatorCalls = false;
 }
-export function resetElevatorsAndFloors() {
+export function resetElevatorsFloorsAndPassangers() {
 	elevators = [];
 	floors = [];
+	passangers = [];
 }
 
 const messageAdvice = 'For more enjoyable UI/UX try inserting max 12 for both.';

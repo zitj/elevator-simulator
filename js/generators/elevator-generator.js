@@ -36,7 +36,7 @@ function renderElevatorsDOM(elevator, numberOfElevators) {
 function generateElevators(numberOfElevators) {
 	if (numberOfElevators && numberOfElevators > 0) {
 		for (let i = 0; i < numberOfElevators; i++) {
-			let elevator = new Elevator(i, STATUS.IDLE, 0, null);
+			let elevator = new Elevator(i, STATUS.IDLE, 0, null, null);
 			elevators.push(elevator);
 			renderElevatorsDOM(elevator, numberOfElevators);
 		}

@@ -1,6 +1,6 @@
-import { callElevatorForm, elevatorsDOM } from './DOM/dom-elements.js';
+import { callElevatorForm, currentFloorInput, destinationFloorInput, elevatorsDOM } from './DOM/dom-elements.js';
 import { elevators } from '../app.js';
-import { passangerShowsUpOnFloor, pickUpPassanger } from './generators/passanger.js';
+import { passangerShowsUpOnFloor, pickUpPassanger } from './generators/passanger-generator.js';
 import { STATUS } from './constants/status.js';
 import { SYMBOLS } from './constants/symbols.js';
 
@@ -20,7 +20,7 @@ function returnNearestAvailableElevatorFor(currentFloor, destination, isRandomCa
 		if (b.differenceInFloors === 0) return 1;
 		return +a.differenceInFloors - +b.differenceInFloors;
 	});
-	const nearestElevatorID = arrayOfDifferencesInFloors[0].id;
+	const nearestElevatorID = arrayOfDifferencesInFloors[0] ? arrayOfDifferencesInFloors[0].id : null;
 	console.log(`This elevator NUMBER ${nearestElevatorID} is closest to you: `, elevators[nearestElevatorID]);
 	elevatorsDOM.childNodes.forEach((elevatorDOMelement) => {
 		if (elevatorDOMelement.dataset.id == nearestElevatorID) {
@@ -42,14 +42,14 @@ function goTo(destinationFloor, currentFloor, nearestElevator, finalDestination)
 	let floorCounter = 0;
 	const totalFloors = Math.abs(destinationFloor - currentFloor);
 	nearestElevator.domElement.innerHTML = `<span class="arrow"></span><span class='destination-floor'>${destinationFloor}</span>`;
-	if (nearestElevator.status == STATUS.MOVING_UP) nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8679;';
-	if (nearestElevator.status == STATUS.MOVING_DOWN) nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8681;';
+	if (nearestElevator.status == STATUS.MOVING_UP) nearestElevator.domElement.querySelector('.arrow').innerHTML = SYMBOLS.ARROW_UP;
+	if (nearestElevator.status == STATUS.MOVING_DOWN) nearestElevator.domElement.querySelector('.arrow').innerHTML = SYMBOLS.ARROW_DOWN;
 	let timer = setInterval(() => {
 		if (floorCounter >= totalFloors) {
 			nearestElevator.status = finalDestination !== null && finalDestination !== undefined ? STATUS.READY : STATUS.IDLE;
 			nearestElevator.currentFloor = destinationFloor;
-			if (nearestElevator.status == STATUS.MOVING_UP) nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8679;';
-			if (nearestElevator.status == STATUS.MOVING_DOWN) nearestElevator.domElement.querySelector('.arrow').innerHTML = '&#8681;';
+			if (nearestElevator.status == STATUS.MOVING_UP) nearestElevator.domElement.querySelector('.arrow').innerHTML = SYMBOLS.ARROW_UP;
+			if (nearestElevator.status == STATUS.MOVING_DOWN) nearestElevator.domElement.querySelector('.arrow').innerHTML = SYMBOLS.ARROW_DOWN;
 			if (nearestElevator.status === STATUS.READY) {
 				console.log(`The elevator NUMBER ${nearestElevator.id} is READY. Moving to final destination.`);
 				nearestElevator.domElement.classList.add('pause');
@@ -91,14 +91,20 @@ function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
 		console.log(message);
 		callElevatorForm.querySelector('.warning-message').innerHTML = message;
 	} else {
+		if (!isRandomCall) {
+			currentFloorInput.value = null;
+			destinationFloorInput.value = null;
+		}
 		callElevatorForm.querySelector('.warning-message').innerHTML = ``;
 		let nearestElevator = returnNearestAvailableElevatorFor(passangersCurrentFloor, destinationFloor, isRandomCall);
-		nearestElevator.status = returnStatus(passangersCurrentFloor, nearestElevator.currentFloor);
-		console.log('This is nearest elevator: ', nearestElevator);
-		nearestElevator.destinationFloor = destinationFloor;
-		passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
-		if (nearestElevator.status === STATUS.READY) goTo(destinationFloor, passangersCurrentFloor, nearestElevator);
-		if (nearestElevator.status !== STATUS.READY) goTo(passangersCurrentFloor, nearestElevator.currentFloor, nearestElevator, destinationFloor);
+		if (nearestElevator) {
+			nearestElevator.status = returnStatus(passangersCurrentFloor, nearestElevator.currentFloor);
+			console.log('This is nearest elevator: ', nearestElevator);
+			nearestElevator.destinationFloor = destinationFloor;
+			passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
+			if (nearestElevator.status === STATUS.READY) goTo(destinationFloor, passangersCurrentFloor, nearestElevator);
+			if (nearestElevator.status !== STATUS.READY) goTo(passangersCurrentFloor, nearestElevator.currentFloor, nearestElevator, destinationFloor);
+		}
 	}
 }
 
