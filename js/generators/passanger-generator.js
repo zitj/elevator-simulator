@@ -1,5 +1,5 @@
-import { floorsDOM, randomCallsSection } from '../DOM/dom-elements.js';
-import { randomElevatorCalls, floors, passangers } from '../../app.js';
+import { floorsDOM, timerNumberDOM, randomCurrentFloorDOM, randomDestinationFloorDOM } from '../DOM/dom-elements.js';
+import { randomElevatorCalls, floors, passangers, intervals } from '../../app.js';
 import { callElevator } from '../main-logic.js';
 import { Passanger } from '../classes/passanger.js';
 import { SYMBOLS } from '../constants/symbols.js';
@@ -39,9 +39,7 @@ function pickUpPassanger(elevator) {
 
 function passangersShowsUpRandomly() {
 	let time = 5;
-	const timerNumberDOM = randomCallsSection.querySelector('.timer').querySelector('.number');
-	const randomCurrentFloorDOM = randomCallsSection.querySelector('.current-floor').querySelector('.number');
-	const randomDestinationFloorDOM = randomCallsSection.querySelector('.destination-floor').querySelector('.number');
+
 	let timerCounter = setInterval(() => {
 		time--;
 		if (time < 0) time = 4;
@@ -53,6 +51,7 @@ function passangersShowsUpRandomly() {
 		}
 		timerNumberDOM.innerHTML = `${time}`;
 	}, 1000);
+	intervals.push(timerCounter);
 
 	let timer = setInterval(() => {
 		time = 0;
@@ -69,6 +68,7 @@ function passangersShowsUpRandomly() {
 			clearInterval(timer);
 		}
 	}, 5000);
+	intervals.push(timer);
 }
 
 export { pickUpPassanger, passangerShowsUpOnFloor, passangersShowsUpRandomly };

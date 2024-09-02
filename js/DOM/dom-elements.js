@@ -11,6 +11,9 @@ const numberOfElevatorsInput = document.getElementById('generate-number-of-eleva
 const currentFloorInput = document.getElementById('current-floor-input');
 const destinationFloorInput = document.getElementById('destination-floor-input');
 const body = document.querySelector('body');
+const timerNumberDOM = randomCallsSection.querySelector('.timer').querySelector('.number');
+const randomCurrentFloorDOM = randomCallsSection.querySelector('.current-floor').querySelector('.number');
+const randomDestinationFloorDOM = randomCallsSection.querySelector('.destination-floor').querySelector('.number');
 
 export {
 	elevatorsDOM,
@@ -26,4 +29,7 @@ export {
 	currentFloorInput,
 	destinationFloorInput,
 	body,
+	timerNumberDOM,
+	randomCurrentFloorDOM,
+	randomDestinationFloorDOM,
 };
