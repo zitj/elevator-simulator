@@ -12,7 +12,7 @@ import {
 	randomButton,
 } from '../DOM/dom-elements.js';
 
-import { resetElevatorsFloorsAndPassangers, resetRandomElevatorCalls } from '../../app.js';
+import { clearAllIntervals, resetElevatorsFloorsAndPassangers, resetRandomElevatorCalls } from '../../app.js';
 import { generateFloors } from './floor-generator.js';
 import { generateElevators, resetDistanceBetweenElevators } from './elevator-generator.js';
 import { BUTTONS } from '../constants/buttons.js';
@@ -48,6 +48,7 @@ function createBuilding() {
 	numberOfElevatorsInput.value = null;
 	currentFloorInput.value = null;
 	destinationFloorInput.value = null;
+	clearAllIntervals();
 }
 
 export { createBuilding };
