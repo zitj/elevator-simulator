@@ -29,6 +29,7 @@ function setCoordinatesToElevator(elevator, htmlElement, numberOfElevators) {
 function renderElevatorsDOM(elevator, numberOfElevators) {
 	let elevatorHTMLelement = document.createElement('div');
 	elevatorHTMLelement.classList.add('elevator');
+	elevatorHTMLelement.innerHTML = `<span class="arrow"></span><span class='destination-floor'></span><span class='passangers-in-elevator'></span>`;
 	elevatorsDOM.appendChild(elevatorHTMLelement);
 	setCoordinatesToElevator(elevator, elevatorHTMLelement, numberOfElevators);
 }

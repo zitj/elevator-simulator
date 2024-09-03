@@ -30,6 +30,10 @@ export function clearAllIntervals() {
 	randomDestinationFloorDOM.innerText = '-';
 }
 
+export function filterPassangers(elevator) {
+	passangers = passangers.filter((passanger) => passanger.id !== elevator.currentRequest.passangersID);
+}
+
 const messageAdvice = 'For more enjoyable UI/UX try inserting max 12 for both.';
 
 createBuildingForm.querySelector('.warning-message').innerHTML = messageAdvice;

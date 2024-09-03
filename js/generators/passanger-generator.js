@@ -4,11 +4,41 @@ import { callElevator } from '../main-logic.js';
 import { Passanger } from '../classes/passanger.js';
 import { SYMBOLS } from '../constants/symbols.js';
 
+function checkIfThereArePassangersOnThisFloor(elevator) {
+	const currentFloor = elevator.currentFloorInMotion ? elevator.currentFloorInMotion : elevator.currentFloor;
+	elevator.passangersToPickUp.forEach((passanger, index) => {
+		if (passanger.waitingOnFloorNumber == currentFloor) {
+			elevator.isPaused = true;
+			pickUpPassanger(elevator, passanger, index);
+		}
+	});
+	// console.log('Check if ther is passanger to pick up: ', elevator.passangersToPickUp);
+}
+
+function checkIfThisIsDestinationFloorOfPassanger(elevator) {
+	if (elevator.pickedUpPassangers && elevator.pickedUpPassangers.length > 0) {
+		elevator.pickedUpPassangers.forEach((passanger, index) => {
+			if (passanger.destinationFloor == elevator.currentFloorInMotion) {
+				elevator.isPaused = true;
+				elevator.pickedUpPassangers.splice(index, 1);
+				setTimeout(() => {
+					const passangersContainer = elevator.domElement.querySelector('.passangers-in-elevator');
+					if (passangersContainer.lastChild) {
+						passangersContainer.removeChild(passangersContainer.lastChild);
+					}
+				}, 300);
+			}
+		});
+		// console.log('Check if there are passangers to leave: ', elevator.pickedUpPassangers);
+	}
+}
+
 function passangerShowsUpOnFloor(number, elevator) {
 	const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 	// const randomisePersonTypeNumber = Math.floor(Math.random() * 7);
-	const passanger = new Passanger(uniqueId, number, elevator.id);
+	const passanger = new Passanger(uniqueId, number, elevator.id, elevator.destinationFloor);
 	passangers.push(passanger);
+	elevator.passangersToPickUp.push(passanger);
 
 	floorsDOM.childNodes.forEach((floor) => {
 		if (floor.dataset.id == number) {
@@ -23,18 +53,27 @@ function passangerShowsUpOnFloor(number, elevator) {
 			}
 		}
 	});
+	// console.log('Passanger shows up on floor: ', elevator);
 }
 
-function pickUpPassanger(elevator) {
-	let floorNumber = Number(elevator.currentFloor);
+function removePassangerDom(elevator) {
+	const currentFloor = elevator.currentFloorInMotion ? elevator.currentFloorInMotion : elevator.currentFloor;
+	let floorNumber = Number(currentFloor);
 	const passangersContainer = floorsDOM.childNodes[floorNumber].querySelector('.passangers');
-	passangersContainer.childNodes.forEach((passanger, index) => {
-		const waitingForElevatorNumber = Number(passanger.dataset.waitingForElevator);
-		if (waitingForElevatorNumber === elevator.id) {
+	passangersContainer.childNodes.forEach((passangerHTMLelement, index) => {
+		const waitingForElevator = Number(passangerHTMLelement.dataset.waitingForElevator);
+		if (waitingForElevator === elevator.id) {
 			passangers.splice(index, 1);
-			passanger.remove();
+			passangerHTMLelement.remove();
 		}
 	});
+}
+
+function pickUpPassanger(elevator, passanger, index) {
+	elevator.domElement.querySelector('.passangers-in-elevator').innerHTML += `<span class="passanger-in-elevator">${SYMBOLS.HEAD}</span>`;
+	elevator.pickedUpPassangers.push(passanger);
+	elevator.passangersToPickUp.splice(index, 1);
+	removePassangerDom(elevator);
 }
 
 function passangersShowsUpRandomly() {
@@ -71,4 +110,4 @@ function passangersShowsUpRandomly() {
 	intervals.push(timer);
 }
 
-export { pickUpPassanger, passangerShowsUpOnFloor, passangersShowsUpRandomly };
+export { pickUpPassanger, passangerShowsUpOnFloor, passangersShowsUpRandomly, checkIfThereArePassangersOnThisFloor, checkIfThisIsDestinationFloorOfPassanger };
