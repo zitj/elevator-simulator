@@ -15,12 +15,13 @@ export function returnNearestAvailableElevatorFor(passangerCurrentFloor, destina
 		if (elevators[i].status !== STATUS.IDLE) {
 			differenceInFloors = Math.abs(+(elevators[i].currentFloorInMotion - passangerCurrentFloor));
 			if (elevators[i].status === STATUS.MOVING_UP || elevators[i].destinationFloor - elevators[i].currentFloorInMotion > 0) {
-				if (passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion < passangerCurrentFloor) {
-					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(+(elevators[destinationFloor] - destinationFloor));
+				if (Math.abs(destinationFloor - elevators[i].destinationFloor) < Math.abs(elevators[i].currentFloorInMotion - elevators[i].destinationFloor)) {
+					// differenceInFloors = Math.abs(elevators[i].destinationFloor - elevators[i].currentFloorInMotion) + Math.abs(elevators[i].destinationFloor - destinationFloor);
+					// console.log(differenceInFloors);
 				}
 			}
 			if (elevators[i].status === STATUS.MOVING_DOWN || elevators[i].destinationFloor - elevators[i].currentFloorInMotion < 0) {
-				if (passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion <= passangerCurrentFloor) {
+				if (passangerCurrentFloor < destinationFloor) {
 					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(destinationFloor);
 				}
 			}
@@ -71,7 +72,7 @@ export function returnNearestAvailableElevatorFor(passangerCurrentFloor, destina
 
 // NEW LOGIC
 function activateElevator(elevator) {
-	const styleClass = elevator.isRandomCall ? 'active-random' : 'active';
+	let styleClass = elevator.isRandomCall ? 'active-random' : 'active';
 	elevator.domElement.classList.add(styleClass);
 	elevator.domElement.querySelector('.destination-floor').innerHTML = `${elevator.destinationFloor}`;
 }
