@@ -15,18 +15,12 @@ export function returnNearestAvailableElevatorFor(passangerCurrentFloor, destina
 		if (elevators[i].status !== STATUS.IDLE) {
 			differenceInFloors = Math.abs(+(elevators[i].currentFloorInMotion - passangerCurrentFloor));
 			if (elevators[i].status === STATUS.MOVING_UP || elevators[i].destinationFloor - elevators[i].currentFloorInMotion > 0) {
-				if (
-					(passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor) ||
-					(passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor)
-				) {
+				if (passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion < passangerCurrentFloor) {
 					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(+(elevators[destinationFloor] - destinationFloor));
 				}
 			}
 			if (elevators[i].status === STATUS.MOVING_DOWN || elevators[i].destinationFloor - elevators[i].currentFloorInMotion < 0) {
-				if (
-					(passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor) ||
-					(passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor)
-				) {
+				if (passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion <= passangerCurrentFloor) {
 					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(destinationFloor);
 				}
 			}
@@ -65,6 +59,7 @@ export function returnNearestAvailableElevatorFor(passangerCurrentFloor, destina
 		}
 		return +a.differenceInFloors - +b.differenceInFloors;
 	});
+
 	const nearestElevatorID = arrayOfDifferencesInFloors[0] ? arrayOfDifferencesInFloors[0].id : null;
 	elevatorsDOM.childNodes.forEach((elevatorDOMelement) => {
 		if (elevatorDOMelement.dataset.id == nearestElevatorID) {
@@ -106,6 +101,7 @@ function stopMovement(elevator, interval) {
 export function pauseMovement(elevator, interval, pauseDuration) {
 	elevator.isPaused = true;
 	elevator.domElement.classList.add('pause');
+	elevator.domElement.querySelector('.destination-floor').innerHTML = `${elevator.currentFloorInMotion}`;
 	clearInterval(interval);
 	setTimeout(() => {
 		elevator.isPaused = false;
