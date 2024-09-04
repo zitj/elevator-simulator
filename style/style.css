@@ -65,11 +65,16 @@ body {
 #floors .floor .words {
 	font-size: 10px;
 	position: absolute;
-	left: -35px;
+	left: -30px;
 	width: 80px;
+	text-align: center;
+	background: rgba(255, 255, 255, 0.4);
+	z-index: 1;
+	padding: 1px 3px;
 }
 #floors .floor .icon {
 	font-size: 25px;
+	z-index: 222222;
 }
 #floors .floor .passangers {
 	height: 100%;
