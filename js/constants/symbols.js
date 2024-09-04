@@ -11,4 +11,5 @@ export const SYMBOLS = {
 		5: '🕴️',
 		6: '👫',
 	},
+	HEAD: '🧑',
 };

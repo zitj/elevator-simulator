@@ -1,14 +1,15 @@
 import { floorsDOM, timerNumberDOM, randomCurrentFloorDOM, randomDestinationFloorDOM } from '../DOM/dom-elements.js';
 import { randomElevatorCalls, floors, passangers, intervals } from '../../app.js';
-import { callElevator } from '../main-logic.js';
+import { callElevator } from '../services/elevator-service.js';
 import { Passanger } from '../classes/passanger.js';
 import { SYMBOLS } from '../constants/symbols.js';
 
 function passangerShowsUpOnFloor(number, elevator) {
 	const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 	// const randomisePersonTypeNumber = Math.floor(Math.random() * 7);
-	const passanger = new Passanger(uniqueId, number, elevator.id);
+	const passanger = new Passanger(uniqueId, number, elevator.id, elevator.destinationFloor);
 	passangers.push(passanger);
+	elevator.passangersToPickUp.push(passanger);
 
 	floorsDOM.childNodes.forEach((floor) => {
 		if (floor.dataset.id == number) {
@@ -21,18 +22,6 @@ function passangerShowsUpOnFloor(number, elevator) {
 				passangerElement.dataset.waitingForElevator = elevator.id;
 				passangersContainer.appendChild(passangerElement);
 			}
-		}
-	});
-}
-
-function pickUpPassanger(elevator) {
-	let floorNumber = Number(elevator.currentFloor);
-	const passangersContainer = floorsDOM.childNodes[floorNumber].querySelector('.passangers');
-	passangersContainer.childNodes.forEach((passanger, index) => {
-		const waitingForElevatorNumber = Number(passanger.dataset.waitingForElevator);
-		if (waitingForElevatorNumber === elevator.id) {
-			passangers.splice(index, 1);
-			passanger.remove();
 		}
 	});
 }
@@ -71,4 +60,4 @@ function passangersShowsUpRandomly() {
 	intervals.push(timer);
 }
 
-export { pickUpPassanger, passangerShowsUpOnFloor, passangersShowsUpRandomly };
+export { passangerShowsUpOnFloor, passangersShowsUpRandomly };

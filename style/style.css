@@ -277,3 +277,20 @@ body.alternative-view .settings-panel form .input-field input {
 body.alternative-view .settings-panel section {
 	border: none;
 }
+.passangers-in-elevator {
+	position: absolute;
+	opacity: 1;
+	z-index: 9999999;
+	display: flex;
+	left: -8px;
+	bottom: -18px;
+	/* font-size: 20px; */
+	transform: scale(0.7);
+}
+
+.passanger-in-elevator {
+	margin-left: -12px;
+}
+.passanger-in-elevator:first-child {
+	margin-left: 0;
+}
