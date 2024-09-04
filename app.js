@@ -2,7 +2,7 @@ import { BUTTONS } from './js/constants/buttons.js';
 import * as DOMElements from './js/DOM/dom-elements.js';
 import { createBuilding } from './js/generators/building-generator.js';
 import { passangersShowsUpRandomly } from './js/generators/passanger-generator.js';
-import { callElevator } from './js/main-logic.js';
+import { callElevator } from './js/services/elevator-service.js';
 
 const { createBuildingForm, callElevatorForm, randomCallsSection, randomButton, timerNumberDOM, randomDestinationFloorDOM, randomCurrentFloorDOM } = DOMElements;
 

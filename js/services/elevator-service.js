@@ -1,49 +1,77 @@
-import { callElevatorForm, currentFloorInput, destinationFloorInput, elevatorsDOM } from './DOM/dom-elements.js';
-import { elevators, filterPassangers, intervals, passangers } from '../app.js';
-import { checkIfThereArePassangersOnThisFloor, checkIfThisIsDestinationFloorOfPassanger, passangerShowsUpOnFloor, pickUpPassanger } from './generators/passanger-generator.js';
-import { STATUS } from './constants/status.js';
-import { SYMBOLS } from './constants/symbols.js';
-
-function returnNearestAvailableElevatorFor(passangerCurrentFloor, destinationFloor, isRandomCall) {
+import { checkIfThereArePassangersOnThisFloor, checkIfThisIsDestinationFloorOfPassanger } from './passanger-service.js';
+import { elevatorsDOM, currentFloorInput, destinationFloorInput, callElevatorForm } from '../DOM/dom-elements.js';
+import { elevators } from '../../app.js';
+import { STATUS } from '../constants/status.js';
+import { SYMBOLS } from '../constants/symbols.js';
+import { passangerShowsUpOnFloor } from '../generators/passanger-generator.js';
+export function returnNearestAvailableElevatorFor(passangerCurrentFloor, destinationFloor, isRandomCall) {
 	let arrayOfDifferencesInFloors = [];
 	for (let i = 0; i < elevators.length; i++) {
 		let differenceInFloors = 0;
 
-		if (elevators[i].status == STATUS.IDLE) differenceInFloors = Math.abs(passangerCurrentFloor - elevators[i].currentFloor);
-		if (elevators[i].status !== STATUS.IDLE) {
-			differenceInFloors = Math.abs(+(elevators[i].currentFloorInMotion - passangerCurrentFloor) - +(passangerCurrentFloor - elevators[i].destinationFloor));
+		if (elevators[i].status == STATUS.IDLE) {
+			differenceInFloors = Math.abs(passangerCurrentFloor - elevators[i].currentFloor);
 		}
-		let elevator = { id: elevators[i].id, differenceInFloors, status: elevators[i].status };
+		if (elevators[i].status !== STATUS.IDLE) {
+			differenceInFloors = Math.abs(+(elevators[i].currentFloorInMotion - passangerCurrentFloor));
+			if (elevators[i].status === STATUS.MOVING_UP || elevators[i].destinationFloor - elevators[i].currentFloorInMotion > 0) {
+				if (
+					(passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor) ||
+					(passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor)
+				) {
+					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(+(elevators[destinationFloor] - destinationFloor));
+				}
+			}
+			if (elevators[i].status === STATUS.MOVING_DOWN || elevators[i].destinationFloor - elevators[i].currentFloorInMotion < 0) {
+				if (
+					(passangerCurrentFloor < destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor) ||
+					(passangerCurrentFloor > destinationFloor && elevators[i].currentFloorInMotion >= passangerCurrentFloor)
+				) {
+					differenceInFloors = Math.abs(+(elevators[i].destinationFloor - elevators[i].currentFloorInMotion)) + Math.abs(destinationFloor);
+				}
+			}
+		}
+		const elevator = {
+			id: elevators[i].id,
+			differenceInFloors,
+			status: elevators[i].status,
+			destinationFloor,
+			passangerCurrentFloor,
+			currentFloor: elevators[i].currentFloorInMotion,
+			elevatorCurrentDestinationFloor: elevators[i].destinationFloor,
+		};
 		arrayOfDifferencesInFloors.push(elevator);
+		arrayOfDifferencesInFloors = arrayOfDifferencesInFloors.filter(
+			(elevator) =>
+				!(elevator.status === STATUS.MOVING_DOWN && elevator.currentFloor < passangerCurrentFloor) && !(elevator.status === STATUS.MOVING_UP && elevator.currentFloor > passangerCurrentFloor)
+		);
 	}
-	// arrayOfDifferencesInFloors.sort((a, b) => {
-	// 	if (a.differenceInFloors === 0) return -1;
-	// 	if (b.differenceInFloors === 0) return 1;
-	// 	return +a.differenceInFloors - +b.differenceInFloors;
-	// });
+
 	arrayOfDifferencesInFloors.sort((a, b) => {
+		const aIsMovingDownAndBelow = a.status === STATUS.MOVING_DOWN && a.currentFloor < passangerCurrentFloor;
+		const aIsMovingUpAndAbove = a.status === STATUS.MOVING_UP && a.currentFloor > passangerCurrentFloor;
+		const bIsMovingDownAndBelow = b.status === STATUS.MOVING_DOWN && b.currentFloor < passangerCurrentFloor;
+		const bIsMovingUpAndAbove = b.status === STATUS.MOVING_UP && b.currentFloor > passangerCurrentFloor;
+
+		if (aIsMovingDownAndBelow && !bIsMovingDownAndBelow) return 1;
+		if (!aIsMovingDownAndBelow && bIsMovingDownAndBelow) return -1;
+		if (aIsMovingUpAndAbove && !bIsMovingUpAndAbove) return 1;
+		if (!aIsMovingUpAndAbove && bIsMovingUpAndAbove) return -1;
+
 		if (a.differenceInFloors === b.differenceInFloors) {
 			if (a.status === STATUS.IDLE && b.status !== STATUS.IDLE) return -1;
 			if (a.status !== STATUS.IDLE && b.status === STATUS.IDLE) return 1;
 			return 0;
 		}
-		return a.differenceInFloors - b.differenceInFloors;
+		return +a.differenceInFloors - +b.differenceInFloors;
 	});
-	console.log('This is array of differences in floors: ', arrayOfDifferencesInFloors);
 	const nearestElevatorID = arrayOfDifferencesInFloors[0] ? arrayOfDifferencesInFloors[0].id : null;
-	// console.log(`This elevator NUMBER ${nearestElevatorID} is closest to you: `, elevators[nearestElevatorID]);
 	elevatorsDOM.childNodes.forEach((elevatorDOMelement) => {
 		if (elevatorDOMelement.dataset.id == nearestElevatorID) {
 			elevators[nearestElevatorID].domElement = elevatorDOMelement;
 		}
 	});
 	return elevators[nearestElevatorID];
-}
-
-function returnStatus(a, b) {
-	if (a - b > 0) return STATUS.MOVING_UP;
-	if (a - b < 0) return STATUS.MOVING_DOWN;
-	if (a - b === 0) return STATUS.READY;
 }
 
 // NEW LOGIC
@@ -93,22 +121,35 @@ function returnHighestFloorOfPassangersToPickUp(passangers) {
 		return null;
 	}
 }
-function returnLowestFloorOfPassangersToLeave(passangers) {
+function returnDestinationFloorToLeave(elevator) {
+	const passangers = elevator.pickedUpPassangers;
 	if (passangers && passangers.length > 0) {
-		return passangers.sort((a, b) => a.destinationFloor - b.destinationFloor)[0].destinationFloor;
+		// if (elevator.status === STATUS.MOVING_DOWN) return passangers.sort((a, b) => a.destinationFloor - b.destinationFloor)[0].destinationFloor;
+		// if (elevator.status === STATUS.MOVING_UP) return passangers.sort((a, b) => b.destinationFloor - a.destinationFloor)[0].destinationFloor;
+		// if (elevator.status === STATUS.READY) {
+		// 	return passangers.sort((a, b) => a.destinationFloor - b.destinationFloor)[0].destinationFloor;
+		// }
+		return passangers[0].destinationFloor;
 	} else {
 		return null;
 	}
+}
+
+function returnStatus(a, b, previousStatus) {
+	// if ((previousStatus === STATUS.MOVING_UP || previousStatus === STATUS.MOVING_DOWN) && a - b === 0) return previousStatus;
+	if (a - b > 0) return STATUS.MOVING_UP;
+	if (a - b < 0) return STATUS.MOVING_DOWN;
+	if (a - b === 0) return STATUS.READY;
 }
 
 export function startMoving(elevator) {
 	let timer = setInterval(() => {
 		elevator.currentFloorInMotion = elevator.currentFloorInMotion !== null ? elevator.currentFloorInMotion : elevator.currentFloor;
 		let highestDestinationFloor = returnHighestFloorOfPassangersToPickUp(elevator.passangersToPickUp);
-		let lowestDestinationFloor = returnLowestFloorOfPassangersToLeave(elevator.pickedUpPassangers);
+		let destinationFloor = returnDestinationFloorToLeave(elevator);
 		if (highestDestinationFloor !== null) elevator.destinationFloor = +highestDestinationFloor;
-		if (lowestDestinationFloor !== null && highestDestinationFloor == null) elevator.destinationFloor = +lowestDestinationFloor;
-		elevator.status = returnStatus(elevator.destinationFloor, elevator.currentFloorInMotion);
+		if (destinationFloor !== null && highestDestinationFloor == null) elevator.destinationFloor = +destinationFloor;
+		elevator.status = returnStatus(elevator.destinationFloor, elevator.currentFloorInMotion, elevator.status);
 
 		if (elevator.passangersToPickUp.length == 0 && elevator.pickedUpPassangers.length == 0) {
 			stopMovement(elevator, timer);
@@ -134,7 +175,7 @@ export function startMoving(elevator) {
 		}
 		// console.log('Current floor in motion: ', elevator.currentFloorInMotion);
 	}, 700);
-	intervals.push(timer);
+	// intervals.push(timer);
 }
 
 function goToDesiredFloor(elevator) {
@@ -143,7 +184,7 @@ function goToDesiredFloor(elevator) {
 	}
 }
 
-function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
+export function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
 	if (passangersCurrentFloor == destinationFloor) {
 		let message = "You don't need an elevator to remain on the same floor :)";
 		console.log(message);
@@ -155,11 +196,11 @@ function callElevator(passangersCurrentFloor, destinationFloor, isRandomCall) {
 		}
 		callElevatorForm.querySelector('.warning-message').innerHTML = ``;
 		let nearestElevator = returnNearestAvailableElevatorFor(passangersCurrentFloor, destinationFloor);
-		nearestElevator.destinationFloor = destinationFloor;
-		nearestElevator.isRandomCall = isRandomCall;
-		passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
-		goToDesiredFloor(nearestElevator);
+		if (nearestElevator !== null && nearestElevator !== undefined) {
+			nearestElevator.destinationFloor = destinationFloor;
+			nearestElevator.isRandomCall = isRandomCall;
+			passangerShowsUpOnFloor(Number(passangersCurrentFloor), nearestElevator);
+			goToDesiredFloor(nearestElevator);
+		}
 	}
 }
-
-export { callElevator };
